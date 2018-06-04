@@ -1,0 +1,16 @@
+{
+  "name": "xm-api-sdk",
+  "version": "1.0.0",
+  "description": "An SDK to help developers make calls to the xMatters API",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "xMatters",
+    "API",
+    "SDK"
+  ],
+  "author": "Alderaan Team",
+  "license": "ISC"
+}
