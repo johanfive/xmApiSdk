@@ -1,47 +1,24 @@
-var people = require("./people");
-var groups = require("./groups");
+var People = require('./people');
 
+module.exports = function(config) {
+    // persists when config is modified outside of this scope
+    var baseURL = 'https://' + config.hostname + '.xmatters.com/api/xm/1/';
 
-module.exports = function (config) {
-    var auth = config;
-
-    var doTheAxiosThing = function (request) {
+    // private
+    var axios = function(request) {
         console.log(request);
-        return request;
     };
 
-    var modifyRequest = function(request, options) {
-        request.additionalStuff = options;
-        return request;
-    }
-
-    var generateFunction = function (aFunc) {
-        var req = Object.assign({}, aFunc(), { auth: auth });
-        return function (options) {
-            var finalRequest = options ? modifyRequest(req, options) : req;
-            doTheAxiosThing(finalRequest);
-        };
-    }
-
-    // TODO: create a generateMethods(people || groups || ...) function
-
-    var peopleMethods = {};
-    for (var methodName in people) {
-        if (people.hasOwnProperty(methodName)) {
-            peopleMethods[methodName] = generateFunction(people[methodName]);
-        }
-    }
-
-    var groupsMethods = {};
-    for (var methodName in groups) {
-        if (groups.hasOwnProperty(methodName)) {
-            groupsMethods[methodName] = generateFunction(groups[methodName]);
-        }
-    }
-
-
+    /* TODO
+        const instance = axios.create({
+            baseURL: 'https://some-domain.com/api/',
+            timeout: 1000,
+            headers: {'X-Custom-Header': 'foobar'}
+        });    
+    */
+    
     return {
-        people: peopleMethods,
-        groups: groupsMethods
+        /** People object containing all People related methods */
+        people: new People({baseURL: baseURL}, axios)
     };
 };
