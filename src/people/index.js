@@ -1,79 +1,80 @@
 /**
  * Bundles up all People related methods
- * @param {Object} config The config object
- * @param {Function} axios The method used to make the API call
- * @returns {Object} An object containing all the People related methods
+ * @param {Function} httpMethod The method used to make the API call
  */
-function People (config, axios){
+function People(httpMethod) {
+    "use strict"
+    if (!(this instanceof People)) {
+        throw new Error("People needs to be called with the `new` keyword");
+    }
+
+    this.makeCall = function (request) {
+        httpMethod(request);
+    };
     this.path = 'people';
-    this.baseURL = config.baseURL;
+};
 
-    this.getAll = function() {
-        axios({
-            baseURL: this.baseURL,
-            path: this.path
-        });
-    };
 
-    /**
-     * Gets a Person object representing a user in xMatters.
-     * @param {string} idOrTargetName The id or the targetName of the Person
-     */
-    this.getByIdOrTargetName = function(idOrTargetName) {
-        axios({
-            method: 'get',
-            baseURL: this.baseURL,
-            path: this.path + '/' + idOrTargetName
-        });
-    };
+People.prototype.getAll = function () {
+    this.makeCall({
+        method: 'get',
+        path: this.path
+    });
+};
 
-    /**
-     * Returns all Person objects matching the given search criteria.
-     * @param {string} term Any of firstName, lastName, targetName, webLogin, phoneNumber, emailAddress
-     */
-    this.search = function(term) {
-        axios({
-            method: 'get',
-            baseURL: this.baseURL,
-            path: this.path + '/?search=' + term
-        });
-    };
+/**
+ * Gets a Person object representing a user in xMatters.
+ * @param {string} idOrTargetName The id or the targetName of the Person
+ */
+People.prototype.getByIdOrTargetName = function (idOrTargetName) {
+    this.makeCall({
+        method: 'get',
+        path: this.path + '/' + idOrTargetName
+    });
+};
 
-    /**
-     * Creates a new user in xMatters.
-     * @param {personObject} personObject
-     * A Person object containing all the information about the Person to be added in xMatters
-     */
-    this.add = function(personObject) {
-        axios({
-            method: 'post',
-            baseURL: this.baseURL,
-            path: this.path,
-            data: personObject
-        });
-    };
+/**
+ * Returns all Person objects matching the given search criteria.
+ * @param {string} term Any of firstName, lastName, targetName, webLogin, phoneNumber, emailAddress
+ */
+People.prototype.search = function (term) {
+    this.makeCall({
+        method: 'get',
+        path: this.path + '/?search=' + term
+    });
+};
 
-    /**
-     * Modifies the properties of a user in xMatters.
-     * @param {editPersonObject} personObject
-     * The person object including the id and any other parameters that represent the properties you want to modify. 
-     */
-    this.edit = function(personObject) {
-        axios({
-            method: 'post',
-            baseURL: this.baseURL,
-            path: this.path + '/' + personObject.id,
-            data: personObject
-        });
-    };
+/**
+ * Creates a new user in xMatters.
+ * @param {personObject} personObject
+ * A Person object containing all the information about the Person to be added in xMatters
+ */
+People.prototype.add = function (personObject) {
+    this.makeCall({
+        method: 'post',
+        path: this.path,
+        data: personObject
+    });
+};
 
-    this.delete = function(id) {
-        axios({
-            method: 'delete',
-            baseURL: this.baseURL,
-            path: this.path + '/' + id
-        });
-    };
+/**
+ * Modifies the properties of a user in xMatters.
+ * @param {editPersonObject} personObject
+ * The person object including the id and any other parameters that represent the properties you want to modify. 
+ */
+People.prototype.edit = function (personObject) {
+    this.makeCall({
+        method: 'post',
+        path: this.path + '/' + personObject.id,
+        data: personObject
+    });
+};
+
+People.prototype.delete = function (id) {
+    this.makeCall({
+        method: 'delete',
+        path: this.path + '/' + id
+    });
 };
 
 module.exports = People;
