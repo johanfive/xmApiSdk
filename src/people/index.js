@@ -1,20 +1,27 @@
+
 /**
  * Bundles up all People related methods
  * @param {Function} httpMethod The method used to make the API call
  */
 function People(httpMethod) {
-    "use strict"
+    'use strict';
     if (!(this instanceof People)) {
-        throw new Error("People needs to be called with the `new` keyword");
+        throw new Error('People needs to be called with the `new` keyword');
     }
 
     this.makeCall = function (request) {
         httpMethod(request);
     };
     this.path = 'people';
-};
+}
 
 
+/**
+ * Returns a paginated list of the users
+ * that are visible to the authenticated user.
+ * @returns {Object} Response code `200 OK`
+ * and a Pagination of Person object in the response body.
+ */
 People.prototype.getAll = function () {
     this.makeCall({
         method: 'get',
@@ -22,9 +29,12 @@ People.prototype.getAll = function () {
     });
 };
 
+
 /**
  * Gets a Person object representing a user in xMatters.
  * @param {string} idOrTargetName The id or the targetName of the Person
+ * @returns {object} Response code `200 OK`
+ * and a Person object in the response body.
  */
 People.prototype.getByIdOrTargetName = function (idOrTargetName) {
     this.makeCall({
@@ -33,9 +43,12 @@ People.prototype.getByIdOrTargetName = function (idOrTargetName) {
     });
 };
 
+
 /**
- * Returns all Person objects matching the given search criteria.
- * @param {string} term Any of firstName, lastName, targetName, webLogin, phoneNumber, emailAddress
+ * return users with matching names, user IDs, email address, or phone numbers.
+ * @param {string} term A list of case-insensitive search terms separated by the + sign or a space.
+ * @returns {Object} Response code `200 OK`
+ * and a Pagination of Person object in the response body.
  */
 People.prototype.search = function (term) {
     this.makeCall({
@@ -44,38 +57,54 @@ People.prototype.search = function (term) {
     });
 };
 
+
 /**
  * Creates a new user in xMatters.
  * @param {personObject} personObject
- * A Person object containing all the information about the Person to be added in xMatters
+ * A Person object containing all the information about
+ * the Person to be added to xMatters
+ * @returns {Object} Response code `201 Created`
+ * and a Person object in the response body.
  */
 People.prototype.add = function (personObject) {
     this.makeCall({
+        data: personObject,
         method: 'post',
-        path: this.path,
-        data: personObject
+        path: this.path
     });
 };
+
 
 /**
  * Modifies the properties of a user in xMatters.
  * @param {editPersonObject} personObject
- * The person object including the id and any other parameters that represent the properties you want to modify. 
+ * The person object including the id and any other parameters
+ * that represent the properties you want to modify.
+ * @returns {Object} Response code `200 OK`
+ * and a Person object in the response body.
  */
 People.prototype.edit = function (personObject) {
     this.makeCall({
+        data: personObject,
         method: 'post',
-        path: this.path + '/' + personObject.id,
-        data: personObject
+        path: this.path + '/' + personObject.id
     });
 };
 
-People.prototype.delete = function (id) {
+
+/**
+ * Deletes a person.
+ * @param {string} idOrTargetName The id or the targetName of the Person
+ * @returns {Object} Response code `200 OK`
+ * and a Person object in the response body.
+ */
+People.prototype.delete = function (idOrTargetName) {
     this.makeCall({
         method: 'delete',
-        path: this.path + '/' + id
+        path: this.path + '/' + idOrTargetName
     });
 };
+
 
 module.exports = People;
 
@@ -102,7 +131,7 @@ module.exports = People;
  @property {string} [webLogin] optional webLogin.
  */
 
- /**
+/**
  @typedef editPersonObject
  @type {Object}
  @property {string} id The id of the Person to modify.

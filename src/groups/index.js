@@ -1,42 +1,42 @@
 var getAll = function () {
-  return {
-    method: 'get',
-    path: 'groups'
-  };
+    return {
+        method: 'get',
+        path: 'groups'
+    };
 };
 
 var getByIdOrTargetName = function () {
-  return {
-    method: 'get',
-    path: 'groups/byIdOrTargetName'
-  };
+    return {
+        method: 'get',
+        path: 'groups/byIdOrTargetName'
+    };
 };
 
 var add = function () {
-  return {
-    method: 'post',
-    path: 'groups/add'
-  };
+    return {
+        method: 'post',
+        path: 'groups/add'
+    };
 };
 
 var edit = function () {
-  return {
-    method: 'post',
-    path: 'groups/edit'
-  };
+    return {
+        method: 'post',
+        path: 'groups/edit'
+    };
 };
 
 var deleteGroup = function () {
-  return {
-    method: 'post',
-    path: 'groups/delete'
-  };
+    return {
+        method: 'post',
+        path: 'groups/delete'
+    };
 };
 
 module.exports = {
-  getAll: getAll,
-  getByIdOrTargetName: getByIdOrTargetName,
-  add: add,
-  edit: edit,
-  deleteGroup: deleteGroup
+    add: add,
+    deleteGroup: deleteGroup,
+    edit: edit,
+    getAll: getAll,
+    getByIdOrTargetName: getByIdOrTargetName
 };

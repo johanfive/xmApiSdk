@@ -9,7 +9,7 @@ var People = require('./people');
  * @returns {xMObject} The interface to use to call xM API
  */
 module.exports = function (config) {
-    "use strict"
+    'use strict';
 
     // private and persists even when config is modified outside of this scope
     var baseURL = 'https://' + config.hostname + '.xmatters.com/api/xm/1/';
