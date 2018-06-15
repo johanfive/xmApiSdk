@@ -1,4 +1,3 @@
-
 /**
  * Bundles up all People related methods
  * @param {Function} httpMethod The method used to make the API call
@@ -13,19 +12,23 @@ function People(httpMethod) {
         httpMethod(request);
     };
     this.path = 'people';
+    this.embed = function (withRoles) {
+        return withRoles && withRoles === 'withRoles' ? '?embed=roles' : '';
+    };
 }
 
 
 /**
  * Returns a paginated list of the users
  * that are visible to the authenticated user.
+ * @param {boolean} [withRoles] True to include a list of the person’s roles in the response
  * @returns {Object} Response code `200 OK`
  * and a Pagination of Person object in the response body.
  */
-People.prototype.getAll = function () {
+People.prototype.getAll = function (withRoles) {
     this.makeCall({
         method: 'get',
-        path: this.path
+        path: this.path + this.embed(withRoles)
     });
 };
 
@@ -33,13 +36,14 @@ People.prototype.getAll = function () {
 /**
  * Gets a Person object representing a user in xMatters.
  * @param {string} idOrTargetName The id or the targetName of the Person
+ * @param {boolean} [withRoles] True to include a list of the person’s roles in the response
  * @returns {object} Response code `200 OK`
  * and a Person object in the response body.
  */
-People.prototype.getByIdOrTargetName = function (idOrTargetName) {
+People.prototype.getByIdOrTargetName = function (idOrTargetName, withRoles) {
     this.makeCall({
         method: 'get',
-        path: this.path + '/' + idOrTargetName
+        path: this.path + '/' + idOrTargetName + this.embed(withRoles)
     });
 };
 
@@ -60,7 +64,7 @@ People.prototype.search = function (term) {
 
 /**
  * Creates a new user in xMatters.
- * @param {personObject} personObject
+ * @param {Object} personObject
  * A Person object containing all the information about
  * the Person to be added to xMatters
  * @returns {Object} Response code `201 Created`
@@ -77,7 +81,7 @@ People.prototype.add = function (personObject) {
 
 /**
  * Modifies the properties of a user in xMatters.
- * @param {editPersonObject} personObject
+ * @param {Object} personObject
  * The person object including the id and any other parameters
  * that represent the properties you want to modify.
  * @returns {Object} Response code `200 OK`
@@ -109,45 +113,3 @@ People.prototype.delete = function (idOrTargetName) {
 module.exports = People;
 
 
-
-/**
- @typedef personObject
- @type {Object}
- @property {string} firstName The first name.
- @property {string} lastName The last name.
- @property {string} targetName The targetName.
- @property {string[]} roles The roles.
- @property {string} [externalKey] optional externalKey.
- @property {boolean} [externallyOwned] optional externallyOwned.
- @property {string} [id] optional id.
- @property {string} [language] optional language.
- @property {string} [phoneLogin] optional phoneLogin.
- @property {Object} [properties] optional properties.
- @property {string} [recipientType] optional recipientType.
- @property {string} [site] optional site.
- @property {string} [status] optional status.
- @property {string[]} [supervisors] optional supervisors.
- @property {string} [timezone] optional timezone.
- @property {string} [webLogin] optional webLogin.
- */
-
-/**
- @typedef editPersonObject
- @type {Object}
- @property {string} id The id of the Person to modify.
- @property {string} [firstName] optional first name.
- @property {string} [lastName] optional last name.
- @property {string} [targetName] optional targetName.
- @property {string[]} [roles] optional roles.
- @property {string} [externalKey] optional externalKey.
- @property {boolean} [externallyOwned] optional externallyOwned.
- @property {string} [language] optional language.
- @property {string} [phoneLogin] optional phoneLogin.
- @property {Object} [properties] optional properties.
- @property {string} [recipientType] optional recipientType.
- @property {string} [site] optional site.
- @property {string} [status] optional status.
- @property {string[]} [supervisors] optional supervisors.
- @property {string} [timezone] optional timezone.
- @property {string} [webLogin] optional webLogin.
- */
