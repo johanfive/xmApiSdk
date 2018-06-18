@@ -1,4 +1,5 @@
 // const https = require('https');
+var makeQueryString = require('querystring').stringify;
 var People = require('./people');
 
 
@@ -14,6 +15,10 @@ module.exports = function (config) {
     var httpMethod = function (request) {
         request.baseURL = baseURL;
         request.headers = { auth: 'Basic ' + credentials };
+        if (request.queryParams) {
+            request.path = request.path + '?' + makeQueryString(request.queryParams);
+            delete request.queryParams;
+        }
         console.log(request);
     };
 

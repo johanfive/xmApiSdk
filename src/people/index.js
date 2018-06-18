@@ -12,53 +12,72 @@ function People(httpMethod) {
         httpMethod(request);
     };
     this.path = 'people';
-    this.embed = function (withRoles) {
-        return withRoles && withRoles === 'withRoles' ? '?embed=roles' : '';
-    };
 }
 
 
 /**
  * Returns a paginated list of the users
  * that are visible to the authenticated user.
- * @param {boolean} [withRoles] True to include a list of the person’s roles in the response
+ * @param {string[]} [withEmbeds] The array of strings representing the embeds
+ * to include in the response
  * @returns {Object} Response code `200 OK`
  * and a Pagination of Person object in the response body.
  */
-People.prototype.getAll = function (withRoles) {
-    this.makeCall({
+People.prototype.getAll = function (withEmbeds) {
+    var request = {
         method: 'get',
-        path: this.path + this.embed(withRoles)
-    });
+        path: this.path
+    };
+    if (withEmbeds) {
+        request.queryParams = {
+            embed: withEmbeds
+        };
+    }
+    this.makeCall(request);
 };
 
 
 /**
  * Gets a Person object representing a user in xMatters.
  * @param {string} idOrTargetName The id or the targetName of the Person
- * @param {boolean} [withRoles] True to include a list of the person’s roles in the response
+ * @param {string[]} [withEmbeds] The array of strings representing the embeds
+ * to include in the response
  * @returns {object} Response code `200 OK`
  * and a Person object in the response body.
  */
-People.prototype.getByIdOrTargetName = function (idOrTargetName, withRoles) {
-    this.makeCall({
+People.prototype.getByIdOrTargetName = function (idOrTargetName, withEmbeds) {
+    var request = {
         method: 'get',
-        path: this.path + '/' + idOrTargetName + this.embed(withRoles)
-    });
+        path: this.path + '/' + idOrTargetName
+    };
+    if (withEmbeds) {
+        request.queryParams = {embed: withEmbeds};
+    }
+    this.makeCall(request);
 };
 
 
 /**
- * return users with matching names, user IDs, email address, or phone numbers.
- * @param {string} term A list of case-insensitive search terms separated by the + sign or a space.
+ * Gets users with matching names, user IDs, email address, or phone numbers.
+ * @param {string} term A list of case-insensitive search terms
+ * separated by the + sign or a space.
+ * @param {string[]} [withEmbeds] The array of strings representing the embeds
+ * to include in the response
  * @returns {Object} Response code `200 OK`
  * and a Pagination of Person object in the response body.
  */
-People.prototype.search = function (term) {
-    this.makeCall({
+People.prototype.search = function (term, withEmbeds) {
+    var request = {
         method: 'get',
-        path: this.path + '/?search=' + term
-    });
+        path: this.path,
+        queryParams: {
+            search: term
+        }
+    };
+    if (withEmbeds) {
+        request.queryParams.embed = withEmbeds;
+    }
+    this.makeCall(request);
 };
 
 
