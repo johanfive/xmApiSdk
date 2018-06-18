@@ -136,6 +136,6 @@ xM.people.edit(person);
 ## Delete
 
 ```
-xM.people.edit('123456');
+xM.people.delete('123456');
 // DELETE /people/123456
 ```
