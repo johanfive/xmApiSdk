@@ -15,6 +15,12 @@ delete config.hostname;
 xM.people.getAll(['roles', 'supervisors']);
 xM.people.delete('123456');
 xM.people.search('light');
-xM.people.search('light', ['roles', 'supervisors']);
+xM.people.search('light saber', ['roles', 'supervisors']);
 xM.people.getByIdOrTargetName('byId');
 xM.people.getByIdOrTargetName('byId', ['roles']);
+
+var prop = {
+    propertyName: '?ZZZ',
+    propertyValue: 'AAA&'
+};
+xM.people.getByProp(prop, ['supervisors']);

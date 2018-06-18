@@ -16,12 +16,11 @@ function People(httpMethod) {
 
 
 /**
- * Returns a paginated list of the users
- * that are visible to the authenticated user.
+ * Gets a paginated list of the users visible to the authenticated user.
  * @param {string[]} [withEmbeds] The array of strings representing the embeds
  * to include in the response
  * @returns {Object} Response code `200 OK`
- * and a Pagination of Person object in the response body.
+ * and a Pagination of Person objects in the response body.
  */
 People.prototype.getAll = function (withEmbeds) {
     var request = {
@@ -38,7 +37,7 @@ People.prototype.getAll = function (withEmbeds) {
 
 
 /**
- * Gets a Person object representing a user in xMatters.
+ * Gets a Person object with matching id or targetName.
  * @param {string} idOrTargetName The id or the targetName of the Person
  * @param {string[]} [withEmbeds] The array of strings representing the embeds
  * to include in the response
@@ -58,13 +57,35 @@ People.prototype.getByIdOrTargetName = function (idOrTargetName, withEmbeds) {
 
 
 /**
+ * Gets users with matching propertyName and propertyValue.
+ * @param {Object} propDesc The object describing the propertyName
+ * and PropertyValue to search by
+ * @param {string[]} [withEmbeds] The array of strings representing the embeds
+ * to include in the response
+ * @returns {object} Response code `200 OK`
+ * and a Pagination of Person objects in the response body.
+ */
+People.prototype.getByProp = function (propDesc, withEmbeds) {
+    var request = {
+        method: 'get',
+        path: this.path,
+        queryParams: propDesc
+    };
+    if (withEmbeds) {
+        request.queryParams.embed = withEmbeds;
+    }
+    this.makeCall(request);
+};
+
+
+/**
  * Gets users with matching names, user IDs, email address, or phone numbers.
  * @param {string} term A list of case-insensitive search terms
  * separated by the + sign or a space.
  * @param {string[]} [withEmbeds] The array of strings representing the embeds
  * to include in the response
  * @returns {Object} Response code `200 OK`
- * and a Pagination of Person object in the response body.
+ * and a Pagination of Person objects in the response body.
  */
 People.prototype.search = function (term, withEmbeds) {
     var request = {

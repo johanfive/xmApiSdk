@@ -14,7 +14,7 @@ module.exports = function (config) {
     // private
     var httpMethod = function (request) {
         request.baseURL = baseURL;
-        request.headers = { auth: 'Basic ' + credentials };
+        request.headers = { Authorization: 'Basic ' + credentials };
         if (request.queryParams) {
             request.path = request.path + '?' + makeQueryString(request.queryParams);
             delete request.queryParams;
