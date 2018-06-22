@@ -14,7 +14,14 @@ module.exports = function (config) {
     // private
     var httpMethod = function (request) {
         request.baseURL = baseURL;
-        request.headers = { Authorization: 'Basic ' + credentials };
+        // Set the request header
+        var headersObject = {};
+        if (request.data) {
+            headersObject = {'Content-Type': 'application/json'};
+        }
+        headersObject.Authorization = 'Basic ' + credentials;
+        request.headers = headersObject;
+
         if (request.queryParams) {
             request.path = request.path + '?' + makeQueryString(request.queryParams);
             delete request.queryParams;

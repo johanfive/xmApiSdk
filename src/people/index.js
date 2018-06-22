@@ -150,6 +150,63 @@ People.prototype.delete = function (idOrTargetName) {
 };
 
 
+/**
+ * Gets a list of devices that belong to the specified user.
+ * @param {string} idOrTargetName The id or the targetName of the Person
+ * @param {boolean} [withTimeFrames] True to include the timeframes
+ * each device is configured to receive notifications.
+ * @param {string} [countryCode] The country code specifying which format
+ * to return the phone numbers in.
+ * @returns {Object} Response code `200 OK`
+ * and a Pagination of Device objects in the response body.
+ */
+People.prototype.getDevicesOf = function (idOrTargetName, withTimeFrames, countryCode) {
+    var request = {
+        method: 'get',
+        path: this.path + '/' + idOrTargetName + '/devices'
+    };
+    var qp = {}; // query params
+    if (withTimeFrames) {
+        qp.embed = 'timeframes';
+    }
+    if (countryCode) {
+        qp.phoneNumberFormat = countryCode;
+    }
+    if (qp.hasOwnProperty('embed') || qp.hasOwnProperty('phoneNumberFormat')) {
+        request.queryParams = qp;
+    }
+    this.makeCall(request);
+};
+
+
+/**
+ * Gets a list of groups that a person belongs to.
+ * @param {string} idOrTargetName The id or the targetName of the Person
+ * @returns {Object} Response code `200 OK`
+ * and a Pagination of Group Membership object in the response body.
+ */
+People.prototype.getGroupsOf = function (idOrTargetName) {
+    this.makeCall({
+        method: 'get',
+        path: this.path + '/' + idOrTargetName + '/group-memberships'
+    });
+};
+
+
+/**
+ * Gets a list of a person’s supervisors.
+ * @param {string} idOrTargetName The id or the targetName of the Person
+ * @returns {Object} Response code `200 OK`
+ * and a Pagination of Person objects in the response body.
+ */
+People.prototype.getSupervisorsOf = function (idOrTargetName) {
+    this.makeCall({
+        method: 'get',
+        path: this.path + '/' + idOrTargetName + '/supervisors'
+    });
+};
+
+
 module.exports = People;
 
 
