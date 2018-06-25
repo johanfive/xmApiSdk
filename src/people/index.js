@@ -9,9 +9,9 @@ function People(httpMethod) {
     }
 
     this.makeCall = function (request) {
-        httpMethod(request);
+        return httpMethod(request);
     };
-    this.path = 'people';
+    this.path = '/people';
 }
 
 
@@ -32,7 +32,7 @@ People.prototype.getAll = function (withEmbeds) {
             embed: withEmbeds
         };
     }
-    this.makeCall(request);
+    return this.makeCall(request);
 };
 
 
@@ -52,7 +52,7 @@ People.prototype.getByIdOrTargetName = function (idOrTargetName, withEmbeds) {
     if (withEmbeds) {
         request.queryParams = {embed: withEmbeds};
     }
-    this.makeCall(request);
+    return this.makeCall(request);
 };
 
 
@@ -74,7 +74,7 @@ People.prototype.getByProp = function (propDesc, withEmbeds) {
     if (withEmbeds) {
         request.queryParams.embed = withEmbeds;
     }
-    this.makeCall(request);
+    return this.makeCall(request);
 };
 
 
@@ -98,7 +98,7 @@ People.prototype.search = function (term, withEmbeds) {
     if (withEmbeds) {
         request.queryParams.embed = withEmbeds;
     }
-    this.makeCall(request);
+    return this.makeCall(request);
 };
 
 
@@ -111,7 +111,7 @@ People.prototype.search = function (term, withEmbeds) {
  * and a Person object in the response body.
  */
 People.prototype.add = function (personObject) {
-    this.makeCall({
+    return this.makeCall({
         data: personObject,
         method: 'post',
         path: this.path
@@ -128,10 +128,10 @@ People.prototype.add = function (personObject) {
  * and a Person object in the response body.
  */
 People.prototype.edit = function (personObject) {
-    this.makeCall({
+    return this.makeCall({
         data: personObject,
         method: 'post',
-        path: this.path + '/' + personObject.id
+        path: this.path
     });
 };
 
@@ -143,7 +143,7 @@ People.prototype.edit = function (personObject) {
  * and a Person object in the response body.
  */
 People.prototype.delete = function (idOrTargetName) {
-    this.makeCall({
+    return this.makeCall({
         method: 'delete',
         path: this.path + '/' + idOrTargetName
     });
@@ -175,7 +175,7 @@ People.prototype.getDevicesOf = function (idOrTargetName, withTimeFrames, countr
     if (qp.hasOwnProperty('embed') || qp.hasOwnProperty('phoneNumberFormat')) {
         request.queryParams = qp;
     }
-    this.makeCall(request);
+    return this.makeCall(request);
 };
 
 
@@ -186,7 +186,7 @@ People.prototype.getDevicesOf = function (idOrTargetName, withTimeFrames, countr
  * and a Pagination of Group Membership object in the response body.
  */
 People.prototype.getGroupsOf = function (idOrTargetName) {
-    this.makeCall({
+    return this.makeCall({
         method: 'get',
         path: this.path + '/' + idOrTargetName + '/group-memberships'
     });
@@ -200,7 +200,7 @@ People.prototype.getGroupsOf = function (idOrTargetName) {
  * and a Pagination of Person objects in the response body.
  */
 People.prototype.getSupervisorsOf = function (idOrTargetName) {
-    this.makeCall({
+    return this.makeCall({
         method: 'get',
         path: this.path + '/' + idOrTargetName + '/supervisors'
     });
