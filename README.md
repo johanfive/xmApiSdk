@@ -264,3 +264,6 @@ xM.people.getSupervisorsOf('uniqueID')
 
 // GET /people/uniqueID/groups
 ```
+
+(!) Not a single one of all dependencies in the package-lock.json is a prod dependency.
+They're all the bagage Jest comes with. Jest is a dev dependency.

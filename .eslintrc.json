@@ -1,0 +1,30 @@
+
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "node": true,
+        "jest": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "brace-style": "error",
+        "camelcase": "warn",
+        "comma-dangle": ["error", "never"],
+        "comma-spacing": "error",
+        "eol-last": "warn",
+        "eqeqeq": "error",
+        "indent": ["error", 4],
+        "key-spacing": "error",
+        "linebreak-style": ["error", "unix"],
+        "no-console": "off",
+        "no-trailing-spaces": "error",
+        "quotes": ["warn", "single"],
+        "semi": ["error", "always"],
+        "sort-keys": "warn",
+        "spaced-comment": "warn"
+    },
+    "parserOptions": {
+        "ecmaVersion": 6
+    }
+}
