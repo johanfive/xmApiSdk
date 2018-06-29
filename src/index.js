@@ -41,7 +41,7 @@ module.exports = function (config) {
                 response.on('end', function () {
                     var parsed = JSON.parse(body);
                     if (response.statusCode >= 200 && response.statusCode < 300) {
-                        resolve(parsed);
+                        resolve(parsed.data);
                     } else {
                         console.log('xM API error ' + response.statusCode);
                         reject(parsed);
