@@ -1,9 +1,7 @@
-+ Mainly Vanilla Javascript. Uses Promises which is natively supported since Node v7.3
-+ Minimum dependencies
-+ IDE autosuggest-friendly / user-friendly
-+ Can be used in both ES5 and ES6 codebases
++ Vanilla Javascript, mainly ES5. Uses Promises
++ No prod dependencies
++ Node-first mindset. (Will need Promise polyfill for use in Browser)
 
-Does not promote callback hell, but might come at a cost. Babel?
 
 # Usage
 
@@ -39,29 +37,26 @@ Request would be:
 ```
 Response woud be:
 ```
-{
-    count: 1,
-    total: 1,
-    data: [
-        {
-            id: '95303232-daf4-4677-9b98-13625ffa9280',
-            targetName: 'wonderwoman',
-            recipientType: 'PERSON',
-            externallyOwned: false,
-            links: [Object],
-            firstName: 'Diana',
-            lastName: 'Prince',
-            language: 'en',
-            timezone: 'US/Eastern',
-            webLogin: 'wonderwoman',
-            site: [Object],
-            status: 'ACTIVE'
-        }
-    ],
-    links: {
-        self: '/api/xm/1/people?search=wonder&offset=0&limit=100'
+[
+    {
+        id: '95303232-daf4-4677-9b98-13625ffa9280',
+        targetName: 'wonderwoman',
+        recipientType: 'PERSON',
+        externallyOwned: false,
+        links: { self: '/api/xm/1/people/95303232-daf4-4677-9b98-13625ffa9280' },
+        firstName: 'Diana',
+        lastName: 'Prince',
+        language: 'en',
+        timezone: 'US/Eastern',
+        webLogin: 'wonderwoman',
+        site: {
+            id: '596c0550-fca0-485c-9395-cc9f4ad3570e',
+            name: 'Default Site',
+            links: [Object]
+        },
+        status: 'ACTIVE'
     }
-}
+]
 ```
 Currently returning a parsed response, but can easily revert back to delivering pure JSON.
 
@@ -70,7 +65,7 @@ The library relies on `Promises`, which enables the user to:
 ```
 async function getWwFullName() {
     const wonderWoman = await xM.people.search('wonder')
-        .then(data => data.data[0])
+        .then(data => data[0])
         .catch(e => console.error(e.message));
     const wwFullName = wonderWoman.firstName + ' ' + wonderWoman.lastName;
     console.log(wwFullName);

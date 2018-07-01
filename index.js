@@ -1,31 +1,36 @@
-// Making use of the lib here.
+// Examples making use of the lib here.
+// Delete this file before publish.
+// Also delete the associate npm script in package.json
 var Xm = require('./src');
 
 var config = {
-    hostname: 'yourHostName',
-    password: 'secret',
-    username: 'yourUserName'
+    hostname: 'yourHostname',
+    password: 'yourPassword',
+    username: 'yourUsername'
 };
 
 
 var xM = Xm(config);
 console.log(xM.people.path);
 
-xM.people.getAll()
-    .then(data => console.log(data))
-    .catch(e => console.error(e.message));
+// xM.people.getAll()
+//     .then(data => console.log(data))
+//     .catch(e => console.error(e.message));
 
 
-async function getWwFullName() {
+const getWwFullName = async () => {
     const wonderWoman = await xM.people.search('wonder')
-        .then(data => data.data[0])
+        .then(data => data[0])
         .catch(e => console.error(e.message));
     const wwFullName = wonderWoman.firstName + ' ' + wonderWoman.lastName;
     console.log(wwFullName);
 }
 
-getWwFullName();
+getWwFullName(); // Diana Prince
 
+xM.getOAuthTokenByPasswordGrantType('xMclientId', 'xMusername', 'xMsecret')
+    .then(data => console.log(data))
+    .catch(e => console.error(e.message));
 
 // xM.people.getDevicesOf('batman', true, 'CA?')
 // .then(data => console.log(data))

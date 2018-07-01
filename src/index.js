@@ -10,7 +10,12 @@ module.exports = function (config) {
     // private and persists even when config is modified outside of this scope
     var baseURL = config.hostname + '.xmatters.com';
     var path = '/api/xm/1';
-    var credentials = Buffer.from(config.username + ':' + config.password).toString('base64');
+    var credentials;
+    if (config.username && config.password) {
+        credentials = 'Basic ' + Buffer.from(config.username + ':' + config.password).toString('base64');
+    } else if (config.accessToken) {
+        credentials = 'Bearer ' + config.accessToken;
+    }
 
     // private
     var enhanceRequest = function (request) {
@@ -24,9 +29,13 @@ module.exports = function (config) {
         // Set the request header
         var headersObject = {};
         if (request.data) {
-            headersObject = { 'Content-Type': 'application/json' };
+            if (request.oauthing) {
+                headersObject = { 'Content-Type': 'application/x-www-form-urlencoded'};
+            } else {
+                headersObject = { 'Content-Type': 'application/json' };
+            }
         }
-        headersObject.Authorization = 'Basic ' + credentials;
+        headersObject.Authorization = credentials;
         request.headers = headersObject;
     };
 
@@ -53,14 +62,60 @@ module.exports = function (config) {
                 reject(JSON.parse(error));
             });
             if (request.data) {
-                var postData = JSON.stringify(request.data);
+                var postData;
+                if (request.oauthing) {
+                    postData = request.data;
+                    delete request.oauthing;
+                } else {
+                    postData = JSON.stringify(request.data);
+                }
                 req.write(postData);
             }
             req.end();
         });
     };
 
+    var getOAuthToken = function (payload) {
+        var request = {
+            data: payload,
+            method: 'post',
+            oauthing: true,
+            path: '/oauth2/token'
+        };
+        return httpMethod(request);
+    };
+
+    // Public
+    var getOAuthTokenByPasswordGrantType = function(clientId, username, password) {
+        const payload = 'grant_type=password' +
+                        '&client_id=' + clientId  +
+                        '&username=' + username + // could probably use config.username here no?
+                        '&password=' + password;
+        return getOAuthToken(payload);
+    };
+
+    var getOAuthTokenByAuthorizationCodeGrantType = function (authorizationCode) {
+        const payload = 'grant_type=authorization_code&authorization_code= ' + authorizationCode;
+        return getOAuthToken(payload);
+    };
+
     return {
+        /**
+         * Gets an OAuth token.
+         * @param {string} authorizationCode The authorizationCode
+         * @returns {Object} Response code `200 OK`
+         * and an AccessToken object in the response body.
+         */
+        getOAuthTokenByAuthorizationCodeGrantType: getOAuthTokenByAuthorizationCodeGrantType,
+        /**
+         * Gets an OAuth token.
+         * @param {string} client_id The client_id
+         * @param {string} username The username
+         * @param {string} password The password
+         * @returns {Object} Response code `200 OK`
+         * and an AccessToken object in the response body.
+         */
+        getOAuthTokenByPasswordGrantType: getOAuthTokenByPasswordGrantType,
         /** A people object containing all people related methods */
         people: new People(httpMethod)
     };
