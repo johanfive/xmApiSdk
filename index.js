@@ -24,17 +24,19 @@ const getWwFullName = async () => {
         .catch(e => console.error(e.message));
     const wwFullName = wonderWoman.firstName + ' ' + wonderWoman.lastName;
     console.log(wwFullName);
-}
+};
 
 getWwFullName(); // Diana Prince
 
-xM.getOAuthTokenByPasswordGrantType('xMclientId', 'xMusername', 'xMsecret')
-    .then(data => console.log(data))
-    .catch(e => console.error(e.message));
+
+
+// xM.getOAuthTokenByPasswordGrantType('xMclientId', 'xMusername', 'xMsecret')
+//     .then(data => console.log(data))
+//     .catch(e => console.error(e.message));
 
 // xM.people.getDevicesOf('batman', true, 'CA?')
-// .then(data => console.log(data))
-// .catch(error => console.error(error.message));
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
 
 
 // var person = {
@@ -44,24 +46,24 @@ xM.getOAuthTokenByPasswordGrantType('xMclientId', 'xMusername', 'xMsecret')
 //     targetName: 'spongebob'
 // };
 // xM.people.add(person)
-// .then(data => console.log(data))
-// .catch(error => console.error(error.message));
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
 
 
 // var person = {
-//     id: '795c18c0-3889-4eda-9c67-bd8a641ccd1b',
+//     id: 'a31b0bea-c03e-4edd-a514-ede5ddf6c782',
 //     roles: ['No Access User']
 // };
 // xM.people.edit(person)
-// .then(data => console.log(data))
-// .catch(error => console.error(error.message));
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
 
 
-// xM.people.delete('795c18c0-3889-4eda-9c67-bd8a641ccd1b')
-// .then(data => console.log(data))
-// .catch(error => console.error(error.message));
+// xM.people.delete('a31b0bea-c03e-4edd-a514-ede5ddf6c782')
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
 
 
-// xM.people.getByIdOrTargetName('795c18c0-3889-4eda-9c67-bd8a641ccd1b')
-// .then(data => console.log(data))
-// .catch(error => console.error(error.message));
+// xM.people.getByIdOrTargetName('a31b0bea-c03e-4edd-a514-ede5ddf6c782')
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));

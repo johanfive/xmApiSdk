@@ -24,5 +24,8 @@
         "semi": ["error", "always"],
         "sort-keys": "warn",
         "spaced-comment": "warn"
+    },
+    "parserOptions": {
+        "ecmaVersion": 8
     }
 }

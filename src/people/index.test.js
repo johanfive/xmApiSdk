@@ -2,17 +2,19 @@ var People = require('./');
 
 
 describe('People', () => {
-    let people, mockHttpMethod;
+    let people, mockRequestEnhancer, mockXmRequest;
     beforeEach(() => {
-        mockHttpMethod = jest.fn();
-        people = new People(mockHttpMethod);
+        mockRequestEnhancer = jest.fn();
+        mockXmRequest = jest.fn();
+        people = new People(mockRequestEnhancer);
+        people.makeCall = jest.fn(request => mockXmRequest(mockRequestEnhancer(request)));
     });
 
     const validate = expectedRequest => {
-        // httpMethod should be called only once
-        expect(mockHttpMethod).toHaveBeenCalledTimes(1);
-        // HttpMethod should be called with the expected request
-        expect(mockHttpMethod).toBeCalledWith(expectedRequest);
+        expect(mockRequestEnhancer).toHaveBeenCalledTimes(1);
+        expect(mockXmRequest).toHaveBeenCalledTimes(1);
+        expect(mockRequestEnhancer).toBeCalledWith(expectedRequest);
+        expect(mockXmRequest).toBeCalledWith(mockRequestEnhancer(expectedRequest));
     };
 
 

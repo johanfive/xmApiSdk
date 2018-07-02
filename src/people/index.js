@@ -1,15 +1,18 @@
+var runXmRequest = require('../xMrequest');
+
+
 /**
  * Bundles up all People related methods
- * @param {Function} httpMethod The method used to make the API call
+ * @param {Function} enhanceRequest The function preparing the request before making the call to xM API
  */
-function People(httpMethod) {
+function People(enhanceRequest) {
     'use strict';
     if (!(this instanceof People)) {
         throw new Error('People needs to be called with the `new` keyword');
     }
 
     this.makeCall = function (request) {
-        return httpMethod(request);
+        return runXmRequest(enhanceRequest(request));
     };
     this.path = '/people';
 }
@@ -208,5 +211,3 @@ People.prototype.getSupervisorsOf = function (idOrTargetName) {
 
 
 module.exports = People;
-
-

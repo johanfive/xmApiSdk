@@ -1,12 +1,13 @@
 const Xm = require('./');
-const People = require('./people');
+const People = require('./people'); // imported in order to validate with .toBeInstanceOf()
 
 
-const config = {
+const testConfig = {
     hostname: 'testHostname',
     password: 'testSecret',
     username: 'testFN'
 };
+const testBase64Cred = 'dGVzdEZOOnRlc3RTZWNyZXQ='; // "testFN:testSecret" base64 encoded
 
 const testData = {
     'count': 4,
@@ -22,18 +23,22 @@ const testData = {
 
 
 describe('Xm', () => {
-    let xM;
+    let xM, mockXmRequest;
     beforeEach(() => {
-        xM = Xm(config);
+        xM = Xm(testConfig);
         xM.people.makeCall = jest.fn(
             () => Promise.resolve(testData)
         );
+        mockXmRequest = jest.fn();
     });
 
 
-    test('has people related methods', () => {
+    test('should have People and Oauth related methods', () => {
         expect(xM).toHaveProperty('people');
         expect(xM.people).toBeInstanceOf(People);
+        expect(xM).toHaveProperty('getOAuthTokenByAuthorizationCodeGrantType');
+        expect(xM).toHaveProperty('getOAuthTokenByPasswordGrantType');
+        expect(xM).toHaveProperty('refreshAccessToken');
     });
 
 
@@ -57,5 +62,27 @@ describe('Xm', () => {
                 expect(error).toBe(expectedError);
                 expect(xM.people.makeCall).toBeCalledWith(expectedRequest);
             });
+    });
+
+    test('enhanceRequest', () => {
+        const expectedInitialRequest = {
+            method: 'get',
+            path: '/people'
+        };
+        const expectedFinalRequest = {
+            headers: {
+                Authorization: 'Basic ' + testBase64Cred
+            },
+            host: testConfig.hostname + '.xmatters.com',
+            method: 'GET',
+            path: '/api/xm/1' + expectedInitialRequest.path
+        };
+        xM.people.makeCall.mockImplementationOnce(
+            // xM.aaTestEnhanceRequest is available here but will be stripped out on publish
+            expectedInitialRequest => mockXmRequest(xM.aaTestEnhanceRequest(expectedInitialRequest))
+        );
+        xM.people.getAll();
+        expect(mockXmRequest).toBeCalledWith(expectedFinalRequest);
+        expect(expectedFinalRequest.method).toEqual(expectedInitialRequest.method.toUpperCase());
     });
 });

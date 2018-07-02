@@ -1,4 +1,4 @@
-var https = require('https');
+var runXmRequest = require('./xMrequest');
 var makeQueryString = require('querystring').stringify;
 var People = require('./people');
 
@@ -9,7 +9,7 @@ module.exports = function (config) {
 
     // private and persists even when config is modified outside of this scope
     var baseURL = config.hostname + '.xmatters.com';
-    var path = '/api/xm/1';
+    var xMapiPath = '/api/xm/1';
     var credentials;
     if (config.username && config.password) {
         credentials = 'Basic ' + Buffer.from(config.username + ':' + config.password).toString('base64');
@@ -17,62 +17,29 @@ module.exports = function (config) {
         credentials = 'Bearer ' + config.accessToken;
     }
 
-    // private
-    var enhanceRequest = function (request) {
-        request.method = request.method.toUpperCase();
+    var requestEnhancer = function (req) {
+        var request = {};
+        request.method = req.method.toUpperCase();
         request.host = baseURL;
-        request.path = path + request.path;
-        if (request.queryParams) {
-            request.path = request.path + '?' + makeQueryString(request.queryParams);
-            delete request.queryParams;
+        request.path = xMapiPath + req.path;
+        if (req.queryParams) {
+            request.path = request.path + '?' + makeQueryString(req.queryParams);
         }
         // Set the request header
         var headersObject = {};
-        if (request.data) {
-            if (request.oauthing) {
-                headersObject = { 'Content-Type': 'application/x-www-form-urlencoded'};
+        if (req.data) {
+            if (req.oauthing) {
+                headersObject = {'Content-Type': 'application/x-www-form-urlencoded'};
             } else {
-                headersObject = { 'Content-Type': 'application/json' };
+                headersObject = {'Content-Type': 'application/json'};
             }
         }
         headersObject.Authorization = credentials;
         request.headers = headersObject;
-    };
-
-    var httpMethod = function (request) {
-        enhanceRequest(request);
-        return new Promise(function (resolve, reject) {
-            var req = https.request(request, function (response) {
-                var body = '';
-                response.on('data', function (d) {
-                    body += d;
-                });
-                response.on('end', function () {
-                    var parsed = JSON.parse(body);
-                    if (response.statusCode >= 200 && response.statusCode < 300) {
-                        resolve(parsed.data);
-                    } else {
-                        console.log('xM API error ' + response.statusCode);
-                        reject(parsed);
-                    }
-                });
-            });
-            req.on('error', function (error) {
-                console.log('xM API network error:');
-                reject(JSON.parse(error));
-            });
-            if (request.data) {
-                var postData;
-                if (request.oauthing) {
-                    postData = request.data;
-                    delete request.oauthing;
-                } else {
-                    postData = JSON.stringify(request.data);
-                }
-                req.write(postData);
-            }
-            req.end();
-        });
+        if (req.data) {
+            request.body = req.data;
+        }
+        return request;
     };
 
     var getOAuthToken = function (payload) {
@@ -82,24 +49,37 @@ module.exports = function (config) {
             oauthing: true,
             path: '/oauth2/token'
         };
-        return httpMethod(request);
+        return runXmRequest(requestEnhancer(request));
     };
 
     // Public
     var getOAuthTokenByPasswordGrantType = function(clientId, username, password) {
-        const payload = 'grant_type=password' +
+        var payload =   'grant_type=password' +
                         '&client_id=' + clientId  +
-                        '&username=' + username + // could probably use config.username here no?
+                        '&username=' + username +
                         '&password=' + password;
         return getOAuthToken(payload);
     };
 
     var getOAuthTokenByAuthorizationCodeGrantType = function (authorizationCode) {
-        const payload = 'grant_type=authorization_code&authorization_code= ' + authorizationCode;
+        var payload = 'grant_type=authorization_code&authorization_code= ' + authorizationCode;
+        return getOAuthToken(payload);
+    };
+
+    var refreshAccessToken = function (clientId, refreshToken) {
+        var payload =   'grant_type=refresh_token' +
+                        '&client_id=' + clientId +
+                        '&refresh_token=' + refreshToken;
         return getOAuthToken(payload);
     };
 
     return {
+        // __TestOnlyStart__
+        // Everything between these 2 comments will be deleted on npm run cleanUp src/index.js
+        // That way requestEnhancer can be unit tested, and stay private on publishing
+        aaTestEnhanceRequest: requestEnhancer,
+        // __TestOnlyEnd__
+
         /**
          * Gets an OAuth token.
          * @param {string} authorizationCode The authorizationCode
@@ -107,16 +87,28 @@ module.exports = function (config) {
          * and an AccessToken object in the response body.
          */
         getOAuthTokenByAuthorizationCodeGrantType: getOAuthTokenByAuthorizationCodeGrantType,
+
         /**
          * Gets an OAuth token.
-         * @param {string} client_id The client_id
-         * @param {string} username The username
-         * @param {string} password The password
+         * @param {string} clientId The client Id corresponding to your account
+         * @param {string} username Your username
+         * @param {string} password Your password
          * @returns {Object} Response code `200 OK`
          * and an AccessToken object in the response body.
          */
         getOAuthTokenByPasswordGrantType: getOAuthTokenByPasswordGrantType,
+
         /** A people object containing all people related methods */
-        people: new People(httpMethod)
+        people: new People(requestEnhancer),
+
+        /**
+         * Gets a new OAuth token.
+         * @param {string} clientId The client Id corresponding to your account
+         * @param {string} refreshToken The refresh token provided in the response
+         * the first time you acquired an access token
+         * @returns {Object} Response code `200 OK`
+         * and an AccessToken object in the response body.
+         */
+        refreshAccessToken: refreshAccessToken
     };
 };
