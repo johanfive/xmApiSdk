@@ -1,26 +1,69 @@
-// Making use of the lib here.
+// Examples making use of the lib here.
+// Delete this file before publish.
+// Also delete the associate npm script in package.json
 var Xm = require('./src');
 
 var config = {
-    hostname: 'yourHostName',
-    password: 'secret',
-    username: 'yourUserName'
+    hostname: 'yourHostname',
+    password: 'yourPassword',
+    username: 'yourUsername'
 };
 
 
 var xM = Xm(config);
 console.log(xM.people.path);
-xM.people.getAll();
-delete config.hostname;
-xM.people.getAll(['roles', 'supervisors']);
-xM.people.delete('123456');
-xM.people.search('light');
-xM.people.search('light saber', ['roles', 'supervisors']);
-xM.people.getByIdOrTargetName('byId');
-xM.people.getByIdOrTargetName('byId', ['roles']);
 
-var prop = {
-    propertyName: '?ZZZ',
-    propertyValue: 'AAA&'
+// xM.people.getAll()
+//     .then(data => console.log(data))
+//     .catch(e => console.error(e.message));
+
+
+const getWwFullName = async () => {
+    const wonderWoman = await xM.people.search('wonder')
+        .then(data => data[0])
+        .catch(e => console.error(e.message));
+    const wwFullName = wonderWoman.firstName + ' ' + wonderWoman.lastName;
+    console.log(wwFullName);
 };
-xM.people.getByProp(prop, ['supervisors']);
+
+getWwFullName(); // Diana Prince
+
+
+
+// xM.getOAuthTokenByPasswordGrantType('xMclientId', 'xMusername', 'xMsecret')
+//     .then(data => console.log(data))
+//     .catch(e => console.error(e.message));
+
+// xM.people.getDevicesOf('batman', true, 'CA?')
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
+
+
+// var person = {
+//     firstName: 'sponge',
+//     lastName: 'bob',
+//     roles: ['Standard User'],
+//     targetName: 'spongebob'
+// };
+// xM.people.add(person)
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
+
+
+// var person = {
+//     id: 'a31b0bea-c03e-4edd-a514-ede5ddf6c782',
+//     roles: ['No Access User']
+// };
+// xM.people.edit(person)
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
+
+
+// xM.people.delete('a31b0bea-c03e-4edd-a514-ede5ddf6c782')
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
+
+
+// xM.people.getByIdOrTargetName('a31b0bea-c03e-4edd-a514-ede5ddf6c782')
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error.message));
