@@ -1,11 +1,9 @@
 {
   "name": "xm-api-sdk",
   "version": "1.0.0",
-  "description": "An SDK to help developers make calls to the xMatters API",
+  "description": "A Javascript SDK to facilitate calls to the xMatters API",
   "main": "index.js",
   "scripts": {
-    "cleanUp": "node cleanup.js",
-    "try": "node index.js",
     "test": "jest"
   },
   "keywords": [
@@ -16,6 +14,6 @@
   "author": "Alderaan Team",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^23.2.0"
+    "jest": "^24.9.0"
   }
 }
