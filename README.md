@@ -1,4 +1,4 @@
-# xM API SDk
+# xM API JS SDk
 `ES5` Vanilla `Javascript` methods to interact with [xMatters REST API](https://help.xmatters.com/xmapi/index.html#xmatters-rest-api)
 
 Intended for use in `Node.js` apps. (`No dependencies`, but requires versions of Node that have `Promises` natively)
