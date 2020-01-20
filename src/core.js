@@ -10,7 +10,7 @@ function Core(config) {
 
 Core.prototype.callXmApi = function (method, reqOptions) {
   return this.makeCall(this.buildRequest(method, reqOptions));
-}
+};
 
 Core.prototype.buildRequest = function (method, reqOptions) {
   if (!reqOptions) {
