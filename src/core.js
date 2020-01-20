@@ -37,7 +37,7 @@ Core.prototype.buildRequest = function (method, reqOptions) {
     options.headers['Content-Length'] = stringifiedData.length;
   }
   return {
-    options,
+    options: options,
     data: stringifiedData
   };
 };
@@ -53,7 +53,7 @@ Core.prototype.makeCall = function (request) {
       response.on('end', function () {
         body = Buffer.concat(body).toString();
         if (body.length === 0) {
-          console.log(`xM API responded [${response.statusCode}] with no data.`);
+          console.log('xM API responded [' + response.statusCode + '] with no data.');
         }
         if (response.statusCode >= 200 && response.statusCode < 300) {
           resolve(self.buidResponse(response, body));
@@ -83,13 +83,13 @@ Core.prototype.makeCall = function (request) {
 };
 
 Core.prototype.buidResponse = function (httpResponse, body) {
-  let parsedBody;
+  var parsedBody;
   try {
     parsedBody = JSON.parse(body);
   } catch (e) {
     parsedBody = null;
   }
-  const xMattersResponse = {
+  var xMattersResponse = {
     headers: httpResponse.headers,
     statusCode: httpResponse.statusCode,
     statusMessage: httpResponse.statusMessage
