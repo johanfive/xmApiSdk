@@ -4,7 +4,8 @@
   "description": "A Javascript SDK to facilitate calls to the xMatters API",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "config": "cp config-template.json config.json"
   },
   "keywords": [
     "xMatters",

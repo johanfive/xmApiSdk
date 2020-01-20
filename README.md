@@ -33,9 +33,12 @@ xM.people.getPeople()
     ```sh
     git clone https://github.com/johanfive/xmApiSdk.git
     ```
-3. Update **config.json** with your credentials
+3. Make a config.json file from config-template.json
+    ```sh
+    npm run config # then update config.json with your credentials
+    ```
 4. and from the root of **xmApiSdk/** run:
-```sh
-node index.js
-```
+    ```sh
+    node index.js
+    ```
 5. Watch the glorious story of *Bob Lawblaw* unfold in your terminal...
