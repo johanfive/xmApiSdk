@@ -1,0 +1,13 @@
+{
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "globals": {
+    "Promise": "readonly"
+  }
+}
