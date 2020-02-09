@@ -14,17 +14,21 @@ And maybe even a new perspective on `Promises error handling`.
 
 ## Usage
 ```js
-const XmApi = require('./src'); // this repo isn't published on npm
+const xmSDK = require('./src'); // this repo isn't published on npm
 const config = require('./config'); // { hostname: '', username: '', password: '' }
 
-const xM = new XmApi(config);
+async function getAllUsers() {
+  const { body: tokens } = await xmSDK.getTokens(config);
+  const xmClient = xmSDK.getClient({ ...config, ...tokens });
+  const xmPeople = xmClient.getPeopleMethods();
+  return xmPeople.getAll();
+}
 
-xM.people.getPeople()
-  .then(resp => console.log(resp))
-  .catch(err => console.error(err));
-// Unsure about methods names yet.
-// For now I'm going with a literal implementation of:
-// https://help.xmatters.com/xmapi/index.html#xmatters-rest-api
+getAllUsers()
+  .then(res => console.log(res))
+  .catch(e => console.error(e));
+// All methods return a promise that resolves to an HTTP response object like:
+// { headers, statusCode, statusMessage, body }
 ```
 
 ## Funsies
@@ -41,4 +45,4 @@ xM.people.getPeople()
     ```sh
     node index.js
     ```
-5. Watch the glorious story of *Bob Lawblaw* unfold in your terminal...
+5. Watch the riveting story of *Bob Lawblaw* unfold in your terminal...

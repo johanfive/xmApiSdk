@@ -24,9 +24,9 @@
   },
   "overrides": [
     {
-      "files": ["./index.js"],
-      "env": {
-        "es6": true
+      "files": ["./index.js", "scripts/*.js"],
+      "parserOptions": {
+          "ecmaVersion": 2018
       }
     }
   ]

@@ -1,5 +1,6 @@
 {
-  "hostname": "yoooourHostname.xmatters.com",
+  "hostname": "yourHostname.xmatters.com",
+  "clientId": "yourClientId",
   "username": "yourUsername",
   "password": "yourPassword"
 }
