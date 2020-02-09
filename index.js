@@ -125,7 +125,7 @@ store.getTokens()
 
     // "return" here ensures errors are handled by the final catch statement
     return xmPeople.getByQuery({ firstName: 'Bob' })
-      .then(({ body }) => Promise.resolve(body.total))
+      .then(({ body }) => body.total)
       .then(matches => {
         if (matches === 0) {
           console.log('Bob not found. Creating Bob.');
@@ -135,7 +135,7 @@ store.getTokens()
       })
       .then(({ body }) => {
         console.log('Bob successfully created');
-        return Promise.resolve(body.targetName);
+        return body.targetName;
       })
       .then(targetName => {
         console.log('Looking up Bob by id/targetName');
@@ -143,7 +143,7 @@ store.getTokens()
       })
       .then(({ body: { id, lastName } }) => {
         console.log('Bob found');
-        return Promise.resolve({ id, lastName });
+        return { id, lastName };
       })
       .then(({ id, lastName }) => {
         console.log(`Modifying Bob's lastName from ${lastName} to "loblo"`);
