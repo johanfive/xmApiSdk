@@ -15,7 +15,7 @@ And maybe even a new perspective on `Promises error handling`.
 ## Usage
 ```js
 const xmSDK = require('./src'); // this repo isn't published on npm
-const config = require('./config'); // { hostname: '', username: '', password: '' }
+const config = require('./config'); // { hostname: '', clientId: '', username: '', password: '' }
 
 async function getAllUsers() {
   const { body: tokens } = await xmSDK.getTokens(config);

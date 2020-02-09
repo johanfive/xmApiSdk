@@ -63,7 +63,7 @@ const store = {
   }
 };
 
-// Here is a function for the initiation phase of your app, or maybe in your middleware ¯\_(ツ)_/¯
+// Here is a function for the initialization phase of your app, or maybe for your middleware ¯\_(ツ)_/¯
 // This function takes an access_token and a refresh_token and returns the xM API client
 function getXmClient(tokens) {
   return store.getHost()
@@ -98,7 +98,7 @@ const handleError = e => console.error(e);
 
 store.getTokens()
   .then(({ access_token, refresh_token }) => {
-    if (access_token || refresh_token) {
+    if (access_token && refresh_token) {
       console.log('We already had the tokens in store');
       return { access_token, refresh_token };
     }

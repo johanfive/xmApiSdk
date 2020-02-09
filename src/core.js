@@ -26,7 +26,39 @@ Core.prototype.callXmApi = function callXmApi(options) {
 };
 
 Core.prototype.makeCall = function(request, initialRequest) {
-  // console.log(request);
+  console.log(request);
+  // if (request.options.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+  //   if (request.data.indexOf('refresh_token=') < 0) {
+  //     console.log('xM API grants token for the first time');
+  //     return Promise.resolve({ body: {
+  //       access_token: 'getTokensabc123',
+  //       refresh_token: 'getTokens321cba'
+  //     }});
+  //   } else {
+  //     console.log('SDK uses the refreshed token to make the request');
+  //     return Promise.resolve({ body: {
+  //       access_token: 'refreshTokensabc123',
+  //       refresh_token: 'refreshTokens321cba'
+  //     }});
+  //   }
+  // } else if (request.options.headers.Authorization.length < 8) {
+  //   console.log('Token appears to have expired, SDK prompts xM API for new tokens');
+  //   var self = this;
+  //   return this.refreshTokens().then(function (res) {
+  //     self.accessToken = res.body.access_token;
+  //     self.refreshToken = res.body.refresh_token;
+  //     if (self.onTokenChange) {
+  //       self.onTokenChange({
+  //         access_token: self.accessToken,
+  //         refresh_token: self.refreshToken
+  //       });
+  //     }
+  //     return self.callXmApi(initialRequest);
+  //   });
+  // } else {
+  //   return Promise.resolve({body: { val: 'ok' } });
+  // }
+
   var self = this;
   return new Promise(function (resolve, reject) {
     var req = https.request(request.options, function (res) {
