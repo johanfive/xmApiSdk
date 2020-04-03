@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 jest.mock('https');
 const Core = require('./Core');
 const { REFRESH_TOKENS } = require('./constants');

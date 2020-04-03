@@ -26,19 +26,19 @@ Core.prototype.callXmApi = function callXmApi(options) {
 
 Core.prototype.makeCall = function(request, initialRequest) {
   var self = this;
-  return new Promise(function (resolve, reject) {
-    var req = https.request(request.options, function (res) {
+  return new Promise(function(resolve, reject) {
+    var req = https.request(request.options, function(res) {
       var body = [];
-      res.on('error', function (e) {
+      res.on('error', function(e) {
         reject(e);
-      }).on('data', function (chunk) {
+      }).on('data', function(chunk) {
         body.push(chunk);
-      }).on('end', function () {
+      }).on('end', function() {
         body = Buffer.concat(body).toString();
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(self.buildResponse(res, body));
         } else if (res.statusCode === 401) {
-          self.refreshTokens().then(function (tokensResp) {
+          self.refreshTokens().then(function(tokensResp) {
             self.accessToken = tokensResp.body.access_token;
             self.refreshToken = tokensResp.body.refresh_token;
             if (self.onTokenChange) {
@@ -54,14 +54,14 @@ Core.prototype.makeCall = function(request, initialRequest) {
         }
       });
     });
-    req.on('error', function (e) {
+    req.on('error', function(e) {
       if (e.code === 'ECONNRESET') {
         e.message += '\nYou may want to set a timeout longer than ' + self.timeout + 'ms in your config object.';
         e.message += '\nIt is likely that your request will eventually succeed despite this error';
       }
       reject(e);
     });
-    req.on('timeout', function () {
+    req.on('timeout', function() {
       req.abort();
     });
     if (request.data) {
@@ -75,7 +75,7 @@ Core.prototype.refreshTokens = function refreshTokens() {
   return this.callXmApi(constants.REFRESH_TOKENS);
 };
 
-Core.prototype.buildResponse = function (res, body) {
+Core.prototype.buildResponse = function(res, body) {
   var response = {
     headers: res.headers,
     statusCode: res.statusCode,

@@ -15,7 +15,7 @@ function processStr(str, autoEncodeURI, xwform) {
 
 function makePathParams(params, autoEncodeURI, xwform) {
   if (Array.isArray(params)) {
-    return params.map(function (param) {
+    return params.map(function(param) {
       return processStr(param.toString(), autoEncodeURI, xwform);
     }).join('/');
   } else {
@@ -29,10 +29,10 @@ function makeQueryString(qsObj, autoEncodeURI, xwform) {
     return typeof qsObj === 'string' ? qsObj : qs;
   }
   var keys = Object.keys(qsObj);
-  keys.forEach(function (key, i) {
+  keys.forEach(function(key, i) {
     var val = qsObj[key];
     if (Array.isArray(val)) {
-      val = val.map(function (el) {
+      val = val.map(function(el) {
         return processStr(el, autoEncodeURI, xwform);
       }).join(',');
     } else {

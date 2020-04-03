@@ -36,7 +36,7 @@ Base.prototype.getUnpaginatedRequestor = function getUnpaginatedRequestor() {
     return self.callXmApi(options)
       .then(function handleResponse(res) {
         var keys = Object.keys(res);
-        keys.forEach(function (key) {
+        keys.forEach(function(key) {
           if (key === 'body') {
             response.body.total = res.body.total;
             response.body.data = response.body.data.concat(res.body.data);
