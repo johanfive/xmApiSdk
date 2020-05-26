@@ -1,5 +1,5 @@
 var Base = require('./Base');
-// var XmSdkError = require('./XmSdkError');
+var XmSdkError = require('./XmSdkError');
 var ROLES = require('./constants').ROLES;
 
 function People(config) {
@@ -17,32 +17,30 @@ People.prototype = Object.create(Base.prototype);
  * @returns {Promise} A promise resolving to the response or rejecting any error
  */
 People.prototype.getAll = function getAll(embedRoles) {
-  var options = { method: 'GET' };
+  var options = {};
   if (embedRoles) {
     options.queryParams = { embed: ROLES };
   }
   // If there are more users in xMatters than the limit (default: 100), the results are paginated
-  var withUnpaginatedResponse = this.getUnpaginatedRequestor();
-  return withUnpaginatedResponse(options);
+  return this.getUnpaginatedResponse(options);
 };
 
-// /**
-//  * Get users with matching names, user IDs, email address, or phone numbers
-//  *
-//  * https://help.xmatters.com/xmapi/index.html#get-people
-//  * @param {String} search A list of search terms
-//  * @returns {Promise} A promise resolving to the response or rejecting any error
-//  */
-// People.prototype.getAll = function getAll(search) {
-//   if (typeof search !== 'string' || search.length < 2) {
-//     throw new XmSdkError('The search must be a string of at least 2 characters');
-//   }
-//   // KEEPING THIS. Will revisit soon
-//   var terms = search.trim().split(/[ +]+/); // split by ' ' or +
-
-//   var options = { method: 'GET' };
-//   return this.callXmApi(options);
-// };
+/**
+ * Get users whose name, user ID, email address, or phone number match the search term
+ *
+ * https://help.xmatters.com/xmapi/index.html#get-people
+ * @param {String} search A list of search terms
+ * @returns {Promise} A promise resolving to the response or rejecting any error
+ */
+People.prototype.search = function search(term) {
+  if (typeof term !== 'string' || term.length < 2) {
+    throw new XmSdkError('The term must be a string of at least 2 characters');
+  }
+  // KEEPING THIS. Will revisit soon
+  // var terms = search.trim().split(/[ +]+/); // split by ' ' or +
+  var options = { queryParams: { search: term }};
+  return this.getUnpaginatedResponse(options);
+};
 
 /**
  * Get a person object that represents a user in xMatters

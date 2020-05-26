@@ -22,9 +22,7 @@ Base.prototype.remove = function remove(options) {
   return this.callXmApi(options);
 };
 
-Base.prototype.getUnpaginatedRequestor = function getUnpaginatedRequestor() {
-  // Could have made this an immediately invoked function, but this feels more readable
-  console.log('Initiating response closure');
+Base.prototype.getUnpaginatedResponse = function getUnpaginatedResponse(reqOpts) {
   var self = this;
   var response = {
     body: {
@@ -32,7 +30,8 @@ Base.prototype.getUnpaginatedRequestor = function getUnpaginatedRequestor() {
       'data': []
     }
   };
-  return function getUnpaginatedResponse(options) {
+  return makeAsManyCallsAsNecessary(reqOpts);
+  function makeAsManyCallsAsNecessary(options) {
     return self.callXmApi(options)
       .then(function handleResponse(res) {
         var keys = Object.keys(res);
@@ -50,12 +49,12 @@ Base.prototype.getUnpaginatedRequestor = function getUnpaginatedRequestor() {
           // here queryParams will be a string. TODO: might be good to create
           // a separate "queryString" property for options objects...
           options.queryParams = res.next.replace(self.path, '').slice(1);
-          return getUnpaginatedResponse(options);
+          return makeAsManyCallsAsNecessary(options);
         } else {
           return response;
         }
       });
-  };
+  }
 };
 
 module.exports = Base;

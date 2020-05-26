@@ -21,8 +21,8 @@ const config = require('./config');
 // }
 
 // getAllTheThings()
-//   .then(res => console.log(res))
-//   .catch(e => console.error(e));
+//   .then(console.log)
+//   .catch(console.error);
 // // __________________________________________________________
 
 // LONG STORY LONG

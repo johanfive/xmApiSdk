@@ -25,8 +25,8 @@ async function getAllUsers() {
 }
 
 getAllUsers()
-  .then(res => console.log(res))
-  .catch(e => console.error(e));
+  .then(console.log)
+  .catch(console.error);
 // All methods return a promise that resolves to an HTTP response object like:
 // { headers, statusCode, statusMessage, body }
 ```
@@ -43,6 +43,6 @@ getAllUsers()
     ```
 4. and from the root of **xmApiSdk/** run:
     ```sh
-    node index.js
+    node demo.js
     ```
 5. Watch the riveting story of *Bob Lawblaw* unfold in your terminal...

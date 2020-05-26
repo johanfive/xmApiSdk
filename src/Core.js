@@ -10,7 +10,7 @@ function Core(config) {
   this.hostname = config.hostname;
   this.clientId = config.clientId;
   this.timeout = config.timeout || 25000; // 25s (Delete method can take up to 22s sometimes)
-  this.autoEncodeURI = config.autoEncodeURI; // both undefined and true mean autoEncode
+  this.autoEncodeURI = typeof config.autoEncodeURI === 'undefined' ? true : config.autoEncodeURI;
   // These are provided when xmSDK.getTokens(config) is called
   this.username = config.username;
   this.password = config.password;
@@ -104,7 +104,7 @@ Core.prototype.buildRequest = function buildRequest(options) {
   var req = {
     options: {
       hostname: this.hostname,
-      method: options.method,
+      method: options.method, // defaults to GET in https.request(options)
       path: path.join(this.path, pathParams),
       headers: {
         Authorization: 'Bearer ' + this.accessToken,

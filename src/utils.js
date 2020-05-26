@@ -10,7 +10,7 @@ function fixedEncodeURIComponent(str, xwform) {
 }
 
 function processStr(str, autoEncodeURI, xwform) {
-  return autoEncodeURI === false ? str : fixedEncodeURIComponent(str, xwform);
+  return autoEncodeURI ? fixedEncodeURIComponent(str, xwform) : str;
 }
 
 function makePathParams(params, autoEncodeURI, xwform) {

@@ -32,7 +32,7 @@
   },
   "overrides": [
     {
-      "files": ["./index.js", "scripts/*.js", "src/*.test.js", "src/__mocks__/*"],
+      "files": ["./demo.js", "./manualTest.js", "scripts/*.js", "src/*.test.js", "src/__mocks__/*"],
       "parserOptions": {
           "ecmaVersion": 2018
       }
